@@ -16,7 +16,7 @@ def create_clusters_DBSCAN(data: list[dict], eps: float=0.5, min_samples: int=10
         indices = np.where(labels==unique_label)
         for i in indices:
             data[i]["label"] = unique_label
-    return data
+    return data, labels, unique_labels
 
 def create_clusters_Agglomerative(data: list[dict], n_clusters: int=None, distance_threshold: float=0.5):
     scaler = StandardScaler
@@ -31,7 +31,7 @@ def create_clusters_Agglomerative(data: list[dict], n_clusters: int=None, distan
         indices = np.where(labels==unique_label)
         for i in indices:
             data[i]["label"] = unique_label
-    return data
+    return data, labels, unique_labels
 
 def create_clusters_KMeans(data: list[dict], n_clusters: int=8):
     scaler = StandardScaler
@@ -46,4 +46,4 @@ def create_clusters_KMeans(data: list[dict], n_clusters: int=8):
         indices = np.where(labels==unique_label)
         for i in indices:
             data[i]["label"] = unique_label
-    return data
+    return data, labels, unique_labels
