@@ -107,4 +107,3 @@ dependencies:
   - pip:
       - mtcnn==0.1.1
       - opencv-python==4.9.0.80
-prefix: C:\Users\adity\anaconda3\envs\face-clustering-rewrite
