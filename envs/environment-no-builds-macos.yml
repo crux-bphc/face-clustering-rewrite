@@ -216,4 +216,3 @@ dependencies:
       - mtcnn==0.1.1
       - opencv-python==4.9.0.80
       - tqdm==4.66.1
-prefix: /Users/adviksinha/miniconda3/envs/face-clustering-rewrite

@@ -104,4 +104,3 @@ dependencies:
   - xz=5.4.5=h8cc25b3_0
   - yarl=1.9.3=py310h2bbff1b_0
   - zlib=1.2.13=h8cc25b3_0
-prefix: C:\Users\adity\anaconda3\envs\face-clustering-rewrite
