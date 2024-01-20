@@ -104,3 +104,6 @@ dependencies:
   - xz=5.4.5
   - yarl=1.9.3
   - zlib=1.2.13
+  - pip:
+      - mtcnn==0.1.1
+      - opencv-python==4.9.0.80
