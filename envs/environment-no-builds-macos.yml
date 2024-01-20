@@ -212,4 +212,8 @@ dependencies:
   - zeromq=4.3.5
   - zlib=1.2.13
   - zstd=1.5.5
+  - pip:
+      - mtcnn==0.1.1
+      - opencv-python==4.9.0.80
+      - tqdm==4.66.1
 prefix: /Users/adviksinha/miniconda3/envs/face-clustering-rewrite
