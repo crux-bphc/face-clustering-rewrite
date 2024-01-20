@@ -10,7 +10,7 @@ def create_folder_for_clustering(source_dir: str, dest_dir: str):
                 source_path = os.path.join(root, file)
                 destination_path = os.path.join(dest_dir, file)
 
-                shutil.move(source_path, destination_path)
+                shutil.copy(source_path, destination_path)
                 n_files+=1
             if n_files%50==0:
                 print(f"Moved {n_files} files!")
