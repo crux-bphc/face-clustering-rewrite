@@ -71,7 +71,7 @@ class Facenet:
                 trainable = True
             layer.trainable = trainable
 
-    def _detect_faces(self, detector: MTCNN, 
+    def _detect_faces_from_image(self, detector: MTCNN, 
                  image_path: str) -> Optional[List[np.ndarray]]:
         """
         Detect faces in the given image using MTCNN.
@@ -99,6 +99,18 @@ class Facenet:
 
         return None
     
+    def _detect_faces_from_folder(self, folder: str) -> dict:
+
+        list_folder = os.listdir(folder)
+        detector = MTCNN()
+        face_dict = {}
+        for image in list_folder:
+            image_path = os.path.join(folder, image)
+            faces = self._detect_faces_from_image(detector, image_path)
+            if faces:
+                face_dict[image] = faces
+        return face_dict
+
     def _process_images(self, images_dir: str) -> dict:
 
 
@@ -215,18 +227,36 @@ class Facenet:
         Returns:
             image_embeddings (list) : List of dictonaries with each dictionary containing image path as key and embedding as value.
         """
-        images = os.listdir(input_dir)
-        detector = MTCNN()
+        face_images = self._detect_faces_from_folder(input_dir)
         image_embeddings = []
-        for image in images:
-            image_path = os.path.join(input_dir, image)
-            faces = self._detect_faces(detector, image_path)
-            if faces:
-                for face in faces:
-                    face = np.expand_dims(face, axis = 0)
-                    face = (face - 127.5) / 128.0
-                    embeddings = self.model.predict(face, verbose = verbose)
-                    image_embeddings.append({"filepath": image_path, "embedding": embeddings})
+        image_count = 0
+        for image in face_images:
+            for face in face_images[image]:
+                face = np.expand_dims(face, axis = 0)
+                face = (face - 127.5) / 128.0
+                embeddings = self.model.predict(face, verbose = verbose)
+                image_embeddings.append({"filepath": image, "embedding": embeddings})
+            image_count += 1
+            if image_count % 100 == 0:
+                print(f"{image_count} images done!")
+
+        # images = os.listdir(input_dir)
+        # print(len(images))
+        # image_count = 0
+        # detector = MTCNN()
+        # image_embeddings = []
+        # for image in images:
+        #     image_path = os.path.join(input_dir, image)
+        #     faces = self._detect_faces(detector, image_path)
+        #     if faces:
+        #         for face in faces:
+        #             face = np.expand_dims(face, axis = 0)
+        #             face = (face - 127.5) / 128.0
+        #             embeddings = self.model.predict(face, verbose = verbose)
+        #             image_embeddings.append({"filepath": image_path, "embedding": embeddings})
+        #     image_count += 1
+        #     if image_count % 100 == 0:
+        #         print(f"{image_count} images done!")
         
         with open(embeddings_path, 'wb') as f:
             pickle.dump(image_embeddings, f)
