@@ -98,7 +98,7 @@ class Facenet:
             return list_faces
 
         return None
-    
+
     def _process_images(self, images_dir: str) -> dict:
 
 
@@ -203,7 +203,7 @@ class Facenet:
         }
         return history
 
-    def predict(self, input_dir: str, verbose: int = 1, embeddings_path: str = "embeddings.pkl") -> List:
+    def predict(self, input_dir: str, verbose: int = 1, embeddings_path: str = "embeddings.pkl", ckpt_num: int = 500) -> List:
         """
         Make predictions using the Facenet model and store embeddings in pickle file.
 
@@ -215,7 +215,10 @@ class Facenet:
         Returns:
             image_embeddings (list) : List of dictonaries with each dictionary containing image path as key and embedding as value.
         """
+
         images = os.listdir(input_dir)
+        print(len(images))
+        image_count = 0
         detector = MTCNN()
         image_embeddings = []
         for image in images:
@@ -227,11 +230,35 @@ class Facenet:
                     face = (face - 127.5) / 128.0
                     embeddings = self.model.predict(face, verbose = verbose)
                     image_embeddings.append({"filepath": image_path, "embedding": embeddings})
-        
-        with open(embeddings_path, 'wb') as f:
-            pickle.dump(image_embeddings, f)
+            image_count += 1
+            if image_count % ckpt_num == 0:
+                if os.path.exists(embeddings_path) and os.path.getsize(embeddings_path) > 0:
+                    with open(embeddings_path, 'rb') as f:
+                        existing_embeddings = pickle.load(f)
+                else:
+                    existing_embeddings = []
 
-        return image_embeddings
+                existing_embeddings.extend(image_embeddings)
+
+                with open(embeddings_path, 'wb') as f:
+                    pickle.dump(existing_embeddings, f)
+                print(f"{image_count} images done!")
+
+                image_embeddings = []
+        
+        if image_embeddings:
+            if os.path.exists(embeddings_path) and os.path.getsize(embeddings_path) > 0:
+                with open(embeddings_path, 'rb') as f:
+                    existing_embeddings = pickle.load(f)
+            else:
+                existing_embeddings = []
+
+            existing_embeddings.extend(image_embeddings)
+
+            with open(embeddings_path, 'wb') as f:
+                pickle.dump(existing_embeddings, f)
+
+        return existing_embeddings
     
     def summary(self):
         """
