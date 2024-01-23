@@ -229,7 +229,7 @@ class Facenet:
                     face = np.expand_dims(face, axis = 0)
                     face = (face - 127.5) / 128.0
                     embeddings = self.model.predict(face, verbose = verbose)
-                    image_embeddings.append({"filepath": image_path, "embedding": embeddings})
+                    image_embeddings.append({"filepath": image, "embedding": embeddings})
             image_count += 1
             if image_count % ckpt_num == 0:
                 if os.path.exists(embeddings_path) and os.path.getsize(embeddings_path) > 0:
