@@ -13,11 +13,15 @@ def create_clusters_DBSCAN(data: list[dict], eps: float=0.5, min_samples: int=10
     clusterer.fit(scaled_embeddings)
     labels = clusterer.labels_
     unique_labels = np.unique(labels)
+    cluster_attributes = {}
     for unique_label in unique_labels:
+        cluster_embeddings = []
         indices = np.where(labels==unique_label)[0]
         for i in indices:
             data[i]["label"] = unique_label
-    return data, labels, unique_labels
+            cluster_embeddings.append(data[i]["embedding"])
+        cluster_attributes[unique_label] = [np.mean(cluster_embeddings), np.std(cluster_embeddings)]
+    return data, labels, unique_labels, cluster_attributes
 
 def create_clusters_Agglomerative(data: list[dict], n_clusters: int=None, distance_threshold: float=0.5,
                                   scale: bool=True):
