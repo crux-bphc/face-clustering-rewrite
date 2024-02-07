@@ -37,7 +37,7 @@ def find_clusters_of_persons(data: dict):
     persons_clusters: dict = {}
     for datapoint in data:
         name = datapoint['filepath'].split("-img-")[0]
-        if name in persons_clusters.values():
+        if name in persons_clusters.keys():
             persons_clusters[name].append(datapoint['label'])
         else:
             persons_clusters[name] = [datapoint['label']]
