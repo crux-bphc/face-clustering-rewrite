@@ -26,12 +26,8 @@ def pairwise_metrics(persons_dict: dict, clusters_dict: dict, images_folder: str
         cluster_pairs[cluster] = math.comb(clusters_dict[cluster][-1], 2)
 
     results = {}
-    print(cluster_pairs)
         
     precision = sum(correctly_clustered_pairs.values()) / sum(no_pairs.values())
-    # for person in correctly_clustered_pairs.keys():
-    #     precision += correctly_clustered_pairs[person] / no_pairs[person]
-
     results['precision'] = precision
 
     recall = sum(correctly_clustered_pairs.values()) / sum(cluster_pairs.values())
@@ -40,8 +36,4 @@ def pairwise_metrics(persons_dict: dict, clusters_dict: dict, images_folder: str
     f_measure = (2 * precision * recall) / (precision + recall)
     results['f_measure'] = f_measure
 
-
-    
-    
-    
     return results
