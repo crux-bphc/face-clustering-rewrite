@@ -32,3 +32,13 @@ def create_person_attributes(data: list[dict]):
     for person in person_embeddings.keys():
         person_attributes[person] = [np.mean(person_embeddings[person], axis=0), np.std(person_embeddings[person], axis=0)]
     return person_attributes
+
+def find_clusters_of_persons(data: dict):
+    persons_clusters: dict = {}
+    for datapoint in data:
+        name = datapoint['filepath'].split("-img-")[0]
+        if name in persons_clusters.values():
+            persons_clusters[name].append(datapoint['label'])
+        else:
+            persons_clusters[name] = [datapoint['label']]
+    return persons_clusters
