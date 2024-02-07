@@ -40,7 +40,7 @@ def create_clusters_Agglomerative(data: list[dict], n_clusters: int=None, distan
         for i in indices:
             data[i]["label"] = unique_label
             cluster_embeddings.append(data[i]["embedding"])
-        cluster_attributes[unique_label] = [np.mean(cluster_embeddings, axis=0), np.std(cluster_embeddings, axis=0)]
+        cluster_attributes[unique_label] = [np.mean(cluster_embeddings, axis=0), np.std(cluster_embeddings, axis=0), len(cluster_embeddings)]
     return data, labels, unique_labels, cluster_attributes
 
 def create_clusters_KMeans(data: list[dict], n_clusters: int=8, scale: bool=True, metric: str="euclidean"):
@@ -59,5 +59,5 @@ def create_clusters_KMeans(data: list[dict], n_clusters: int=8, scale: bool=True
         for i in indices:
             data[i]["label"] = unique_label
             cluster_embeddings.append(data[i]["embedding"])
-        cluster_attributes[unique_label] = [np.mean(cluster_embeddings, axis=0), np.std(cluster_embeddings, axis=0)]
+        cluster_attributes[unique_label] = [np.mean(cluster_embeddings, axis=0), np.std(cluster_embeddings, axis=0), len(cluster_embeddings)]
     return data, labels, unique_labels, cluster_attributes
